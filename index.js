@@ -1,43 +1,52 @@
-const express = require("express")
-const path = require("path")
-const { Git } = require('node-git-server')
+const dotenv = require('dotenv');
 
-const app = express()
+dotenv.config();
+
+const express = require('express');
+const path = require('path');
+const { Git } = require('node-git-server');
+const http = require('http');
+const https = require('https');
+
+const app = express();
 
 const gitServer = new Git(path.resolve(__dirname, 'repos'), {
-  autoCreate: true
-})
+  autoCreate: true,
+});
 
-gitServer.on('push', async (push) => {
-	console.log(132123)
-	push.accept();
-})
+gitServer.on('push', async push => {
+  console.log(132123);
+  push.accept();
+});
 
-gitServer.listen(7005, { type: 'http' }, () => {
+const { NODE_ENV: env } = process.env;
+const serverType = env === 'production' ? 'https' : 'http';
+
+gitServer.listen(7005, { type: serverType }, () => {
   console.log('Git server is running on port 7005');
-})
+});
 
-const server = require("http").createServer(app)
-server.listen(3003, () => {
-	console.log("listening on port " + (process.env.PORT || 3002))
-})
+const serverProtocol = env === 'production' ? https : http;
 
+const server = serverProtocol.createServer(app);
+const port = process.env.PORT || 3003;
+server.listen(port, () => {
+  console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
+});
 
-const func = async () =>{
+const func = async () => {
   const response = await gitServer.list();
   console.log(response);
-}
+};
 
 // extension: first git push
 // user: change the code
 // extension: upload the changed file
-// server: clone the repo (if no exist); 
+// server: clone the repo (if no exist);
 // server: replace the same file with the user's one
 // server: commit with the timestamp
 // server: push to itself
 // server: delete the clone (after a timeout?)
-
-
 
 // checkout to the new branch
 // commit
