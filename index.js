@@ -34,7 +34,8 @@ server.listen(port, () => {
   console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
 });
 
-app.get('/lifebeat', (res, res) => {
+app.get('/lifebeat', (req, res) => {
+  console.log('request from ', req.ip);
   res.send(`I'm alive`);
 });
 
