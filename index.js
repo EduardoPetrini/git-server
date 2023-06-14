@@ -19,25 +19,23 @@ gitServer.on('push', async push => {
   push.accept();
 });
 
+const port = process.env.PORT || 3004;
+
 const { NODE_ENV: env } = process.env;
 const serverType = env === 'production' ? 'https' : 'http';
 
-gitServer.listen(7005, { type: serverType }, () => {
-  console.log('Git server is running on port 7005');
+gitServer.listen(port, { type: serverType }, () => {
+  console.log('Git server is running on port ',port, serverType);
 });
 
 const serverProtocol = env === 'production' ? http : http;
 
-const server = serverProtocol.createServer(app);
-const port = process.env.PORT || 3003;
-server.listen(port, () => {
-  console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
-});
+// const server = serverProtocol.createServer(app);
 
-app.get('/lifebeat', (req, res) => {
-  console.log('request from ', req.ip);
-  res.send(`I'm alive`);
-});
+// server.listen(port, () => {
+//   console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
+// });
+
 
 const func = async () => {
   const response = await gitServer.list();
