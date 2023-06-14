@@ -34,6 +34,10 @@ server.listen(port, () => {
   console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
 });
 
+app.get('/lifebeat', (res, res) => {
+  res.send(`I'm alive`);
+});
+
 const func = async () => {
   const response = await gitServer.list();
   console.log(response);
