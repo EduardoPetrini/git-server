@@ -22,7 +22,7 @@ gitServer.on('push', async push => {
 const port = process.env.PORT || 3004;
 
 const { NODE_ENV: env } = process.env;
-const serverType = env === 'production' ? 'https' : 'http';
+const serverType = env === 'production' ? 'http' : 'http';
 
 gitServer.listen(port, { type: serverType }, () => {
   console.log('Git server is running on port ',port, serverType);
