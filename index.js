@@ -26,7 +26,7 @@ gitServer.listen(7005, { type: serverType }, () => {
   console.log('Git server is running on port 7005');
 });
 
-const serverProtocol = env === 'production' ? https : http;
+const serverProtocol = env === 'production' ? http : http;
 
 const server = serverProtocol.createServer(app);
 const port = process.env.PORT || 3003;
