@@ -1,14 +1,5 @@
-const dotenv = require('dotenv');
-
-dotenv.config();
-
-const express = require('express');
 const path = require('path');
 const { Git } = require('node-git-server');
-const http = require('http');
-const https = require('https');
-
-const app = express();
 
 const gitServer = new Git(path.resolve(__dirname, 'repos'), {
   autoCreate: true,
@@ -21,26 +12,9 @@ gitServer.on('push', async push => {
 
 const port = process.env.PORT || 3004;
 
-const { NODE_ENV: env } = process.env;
-const serverType = env === 'production' ? 'http' : 'http';
-
-gitServer.listen(port, { type: serverType }, () => {
-  console.log('Git server is running on port ',port, serverType);
+gitServer.listen(port, { type: 'http' }, () => {
+  console.log('Git server is running on port ', port);
 });
-
-const serverProtocol = env === 'production' ? http : http;
-
-// const server = serverProtocol.createServer(app);
-
-// server.listen(port, () => {
-//   console.log(`listening on port ${port}, env ${env}, serverType ${serverType}`);
-// });
-
-
-const func = async () => {
-  const response = await gitServer.list();
-  console.log(response);
-};
 
 // extension: first git push
 // user: change the code
